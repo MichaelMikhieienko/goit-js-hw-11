@@ -16,6 +16,9 @@ export async function getImage(params) {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
+    page: 1,
+    per_page: 40, 
+       
   };
 
   const response = await instance.get('', {

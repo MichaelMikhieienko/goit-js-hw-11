@@ -35,9 +35,7 @@ form.addEventListener('submit', async event => {
   try {
     // Выполняем HTTP-запрос с помощью axios
     const { hits, total } = await getImage({
-      q: trimSearchValue(searchQuery),
-      page: 1,
-      per_page: 20,
+      q: trimSearchValue(searchQuery),      
     });
 
     gallery.innerHTML = '';
