@@ -16,20 +16,23 @@ let currentImages = 0;
 form.addEventListener('submit', async event => {
   event.preventDefault(); // Предотвращаем перезагрузку страницы
 
+  const searchQuery = form.searchQuery.value.trim();
+
   loadMoreButton.style.display = 'none';
 
   currentImages = 0;
   currentPage = 1;
 
+  if (!searchQuery.length) {
+    Notiflix.Notify.info('Hooray! We not found anything!');
+    return;
+  }
+
   try {
     // Выполняем HTTP-запрос с помощью axios
-    const { hits, total } = await getImage();
+    const { hits, totalHits: total } = await getImage(searchQuery);
 
     gallery.innerHTML = '';
-
-    if (!total) {
-      return;
-    }
 
     if (total === 0) {
       Notiflix.Notify.info('Hooray! We not found anything!');
@@ -54,30 +57,24 @@ form.addEventListener('submit', async event => {
   }
 });
 
-let isNeedLoadMore = false;
-
 // Обрабатываем клик по кнопке "Load more"
 loadMoreButton.addEventListener('click', async () => {
-  if (isNeedLoadMore) {
-    loadMoreButton.style.display = 'none';
-    Notiflix.Notify.info('Anything not found');
-    return;
-  }
-
   try {
-    // Выполняем HTTP-запрос с помощью axios
-    const { hits, total } = await getImage(currentPage + 1);
+    const searchQuery = form.searchQuery.value;
 
-    if (!total) {
-      return;
-    }
+    // Выполняем HTTP-запрос с помощью axios
+    const { hits, totalHits: total } = await getImage(
+      searchQuery,
+      currentPage + 1
+    );
 
     currentImages += hits.length;
 
     gallery.innerHTML += renderImage(hits);
 
-    if (total === currentImages) {
-      isNeedLoadMore = true;
+    if (total <= currentImages) {
+      loadMoreButton.style.display = 'none';
+      Notiflix.Notify.info('You have reached the end of the list');
     }
 
     currentPage++; // Увеличиваем значение текущей страницы

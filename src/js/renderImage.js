@@ -1,7 +1,7 @@
 export function renderImage(images) {
   return images.map(image => {
     return `<div class="photo-card">
-                <img width="300" src="${image.webformatURL}" alt="${images.tags}" loading="lazy" />
+                <img width="300" src="${image.webformatURL}" alt="${images.tags}" />
                 <div class="info">
                     <p class="info-item">
                         <b>Likes</b>
