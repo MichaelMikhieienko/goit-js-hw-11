@@ -70,7 +70,7 @@ loadMoreButton.addEventListener('click', async () => {
 
     currentImages += hits.length;
 
-    gallery.innerHTML += renderImage(hits);
+    gallery.insertAdjacentHTML('beforeend', renderImage(hits).join(''));
 
     if (total <= currentImages) {
       loadMoreButton.style.display = 'none';
